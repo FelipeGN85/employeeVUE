@@ -10,12 +10,14 @@
           <td>Salary</td>
           <td>Age</td>
           <td>Details</td>
+          <td>Delete</td>
         </tr>
         <tr v-for="emp in allEmployees" v-bind:key="emp.id">
           <td>{{ emp.employee_name }}</td>
           <td>{{ emp.employee_salary }}</td>
           <td>{{ emp.employee_age }}</td>
-          <td><button v-on:click="goToDetails(emp.id)">ok</button></td>
+          <td><button v-on:click="goToDetails(emp.id)">Details</button></td>
+          <td><button v-on:click="deleteEmp(emp.id)">Delete</button></td>
         </tr>
       </table>
     </div>
@@ -32,12 +34,16 @@ export default {
     Spinner,
   },
   methods: {
-    ...mapActions(["fetchEmployees"]),
+    ...mapActions(["fetchEmployees", "deleteEmployee"]),
+    deleteEmp: function(id){
+      this.deleteEmployee(id);
+    },
     goToDetails(id) {
       this.$router.push({
        path:`/employee/details/${id}`,
       });
     },
+
   },
   computed: {
     ...mapGetters(["allEmployees"]),
