@@ -37,6 +37,17 @@ const actions = {
             }).finally(() => {
                 commit('isLoading', false);
             });
+    },
+
+    async deleteEmployee({ commit }, id) {
+        axios.delete(`http://dummy.restapiexample.com/api/v1/delete/${id}`)
+            .then(response => {
+                commit('deleteEmployee', id)
+                alert(response.data.message)
+            }).catch(error => {
+                alert(error);
+            });
+
     }
 };
 
@@ -49,6 +60,15 @@ const mutations = {
     },
     setEmployee: (state, data) => {
         state.employee = data;
+    },
+    deleteEmployee: (state, id) => {
+        var employees = state.employees.filter((e) => {
+            if (e.id !== id) {
+                return e;
+            }
+        });
+        state.employees = employees;
+        return state;
     }
 };
 
