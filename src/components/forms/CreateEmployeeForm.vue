@@ -1,19 +1,11 @@
 <template>
   <div class="form-container">
-    <form>
-      <div class="row">
-        <input type="text" placeholder="Name" v-model="employee.name"/>
-      </div>
-      <div class="row">
-        <input type="text" placeholder="Salary" v-model="employee.salary"/>
-      </div>
-      <div class="row">
-        <input type="text" placeholder="Age" v-model="employee.age"/>
-      </div>
-      <div class="row">
-        <button type="button" class="btn btn-success" @click="save()">Create</button>
-      </div>
-    </form>
+      <form>
+        <input type="text" class="form-control" placeholder="Name" v-model="employee.name"/>
+        <input type="text" class="form-control mt-4" placeholder="Salary" v-model="employee.salary"/>
+        <input type="text" class="form-control mt-4" placeholder="age" v-model="employee.age"/>
+        <button type="button" class="btn btn-success mt-4" @click="save()">Create</button>
+      </form>
   </div>
 </template>
 
@@ -21,14 +13,14 @@
 import { mapActions } from "vuex";
 
 export default {
-  name: 'CreateEmployeeForm',
+  name: "CreateEmployeeForm",
   data() {
     return {
-      employee:{
+      employee: {
         name: "",
         salary: "",
-        age: ""
-      }
+        age: "",
+      },
     };
   },
   methods: {
@@ -49,10 +41,11 @@ export default {
 </script>
 
 <style>
-  .form-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: left;
-  }
+.form-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  font-size: 30px;
+}
 </style>
