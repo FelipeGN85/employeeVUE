@@ -1,12 +1,12 @@
 <template>
   <div class="about">
     <h1>Employee List</h1>
-    <Employee />
+    <List />
   </div>
 </template>
 <script>
-import Employee from "@/components/Employee.vue";
+import List from "@/components/List.vue";
 export default {
-  components: { Employee },
+  components: { List },
 };
 </script>
