@@ -48,6 +48,18 @@ const actions = {
                 alert(error);
             });
 
+    },
+
+    async createEmployee({ commit }, newEmployee) {
+        commit('isLoading', true);
+        axios.post(`http://dummy.restapiexample.com/api/v1/create`, newEmployee)
+            .then(response => {
+                commit('createEmployee', response.data)
+            }).catch(error => {
+                alert(error);
+            }).finally(() => {
+                commit('isLoading', false);
+            });
     }
 };
 
@@ -69,7 +81,8 @@ const mutations = {
         });
         state.employees = employees;
         return state;
-    }
+    },
+    createEmployee: (state, data) => state.employees.unshift(data),
 };
 
 export default {
