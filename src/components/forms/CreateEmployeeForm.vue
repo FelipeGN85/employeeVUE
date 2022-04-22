@@ -57,10 +57,11 @@ export default {
     ...mapActions(["createEmployee"]),
     save: function () {
       this.$v.$touch()
-      if (this.$v.$invalid) {
+      if (this.$v.$invalid && this.$v.$dirty) {
         this.submitStatus = 'ERROR'
       } else {
         this.createEmployee(this.employee);
+        this.resetValidations();
         this.resetEmployee();
         this.submitStatus = 'PENDING'
         setTimeout(() => {
@@ -75,6 +76,9 @@ export default {
         salary: "",
       };
     },
+    resetValidations: function () {
+      this.$v.$reset();
+    }
   },
 };
 </script>
