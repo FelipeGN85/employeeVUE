@@ -11,9 +11,7 @@ const getters = {
     allEmployees: (state) => state.employees,
     isLoading: (state) => state.loading,
     employee: (state) => state.employee,
-    getMemoizedEmployeeList: state => {
-        return state.memoizedEmployeeList;
-    },
+    getMemoizedEmployeeList: (state) => state.memoizedEmployeeList,
 };
 
 const actions = {
@@ -35,17 +33,26 @@ const actions = {
         }
     },
 
-    async fetchEmployee({ commit }, id) {
-        commit('isLoading', true);
-        axios.get(`http://dummy.restapiexample.com/api/v1/employee/${id}`)
-            .then(response => {
-                commit('setEmployee', response.data.data)
-            }).catch(error => {
-                alert(error);
-                window.location.reload();
-            }).finally(() => {
-                commit('isLoading', false);
-            });
+    async fetchEmployee({ commit, getters }, id) {
+        if (!getters.getMemoizedEmployeeList) {
+            commit('isLoading', true);
+            axios.get(`http://dummy.restapiexample.com/api/v1/employee/${id}`)
+                .then(response => {
+                    commit('setEmployee', response.data.data)
+                }).catch(error => {
+                    alert(error);
+                    window.location.reload();
+                }).finally(() => {
+                    commit('isLoading', false);
+                });
+
+        } else {
+            getters.getMemoizedEmployeeList.find((employee) => {
+                if (employee.id == id) {
+                    commit('setEmployee', employee);
+                }
+            })
+        }
     },
 
     async deleteEmployee({ commit }, id) {
@@ -93,9 +100,9 @@ const mutations = {
     },
     createEmployee: (state, data) => state.employees.unshift(data),
 
-    setMemoizedEmployeeList(state, employeeRequest) {
+    setMemoizedEmployeeList: (state, employeeRequest) => {
         state.memoizedEmployeeList = employeeRequest;
-    },
+    }
 };
 
 export default {
