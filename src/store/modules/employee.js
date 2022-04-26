@@ -36,12 +36,13 @@ const actions = {
             commit('isLoading', true);
             axios.get(`http://dummy.restapiexample.com/api/v1/employee/${id}`)
                 .then(response => {
-                    commit('setEmployee', response.data.data)
+                    setTimeout(() => {
+                        commit('setEmployee', response.data.data)
+                        commit('isLoading', false);
+                    }, 5000);
                 }).catch(error => {
                     alert(error);
                     window.location.reload();
-                }).finally(() => {
-                    commit('isLoading', false);
                 });
 
         } else {
