@@ -18,10 +18,10 @@
           <tbody>
             <tr v-for="emp in allEmployees" v-bind:key="emp.id">
               <td>{{ emp.employee_name }}</td>
-            <td>{{ emp.employee_salary }}</td>
-            <td>{{ emp.employee_age }}</td>
-            <td><button type="button" class="btn btn-success" v-on:click="goToDetails(emp.id)">Details</button></td>
-            <td><button type="button" class="btn btn-danger" v-on:click="deleteEmp(emp.id)">Delete</button></td>
+              <td>{{ emp.employee_salary }}</td>
+              <td>{{ emp.employee_age }}</td>
+              <td><button type="button" class="btn btn-success" v-on:click="goToDetails(emp.id)">Details</button></td>
+              <td><button type="button" class="btn btn-danger" v-on:click="deleteEmp(emp.id)">Delete</button></td>
             </tr>
           </tbody>
         </table>
