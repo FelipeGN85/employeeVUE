@@ -4,24 +4,21 @@ const state = {
     employees: [],
     loading: false,
     employee: {},
-    memoizedEmployeeList: null
 };
 
 const getters = {
     allEmployees: (state) => state.employees,
     isLoading: (state) => state.loading,
-    employee: (state) => state.employee,
-    getMemoizedEmployeeList: (state) => state.memoizedEmployeeList,
+    employee: (state) => state.employee
 };
 
 const actions = {
     async fetchEmployees({ commit, getters }) {
-        if (!getters.getMemoizedEmployeeList) {
+        if (!getters.allEmployees.length > 0) {
             commit('isLoading', true);
             axios.get(`http://dummy.restapiexample.com/api/v1/employees`)
                 .then(response => {
                     commit('setEmployees', response.data.data);
-                    commit('setMemoizedEmployeeList', response.data.data)
                 }).catch(error => {
                     alert(error);
                     window.location.reload();
@@ -29,12 +26,12 @@ const actions = {
                     commit('isLoading', false);
                 });
         } else {
-            return getters.getMemoizedEmployeeList;
+            return getters.allEmployees;
         }
     },
 
     async fetchEmployee({ commit, getters }, id) {
-        if (!getters.getMemoizedEmployeeList) {
+        if (!getters.allEmployees.length > 0) {
             commit('isLoading', true);
             axios.get(`http://dummy.restapiexample.com/api/v1/employee/${id}`)
                 .then(response => {
@@ -47,7 +44,7 @@ const actions = {
                 });
 
         } else {
-            getters.getMemoizedEmployeeList.find((employee) => {
+            getters.allEmployees.find((employee) => {
                 if (employee.id == id) {
                     commit('setEmployee', employee);
                 }
@@ -98,11 +95,7 @@ const mutations = {
         state.employees = employees;
         return state;
     },
-    createEmployee: (state, data) => state.employees.unshift(data),
-
-    setMemoizedEmployeeList: (state, employeeRequest) => {
-        state.memoizedEmployeeList = employeeRequest;
-    }
+    createEmployee: (state, data) => state.employees.unshift(data)
 };
 
 export default {
