@@ -3,13 +3,17 @@ import axios from "axios";
 const state = {
     employees: [],
     loading: false,
-    employee: {}
+    employee: {},
+    memoizedEmployeeList: null
 };
 
 const getters = {
     allEmployees: (state) => state.employees,
     isLoading: (state) => state.loading,
-    employee: (state) => state.employee
+    employee: (state) => state.employee,
+    getMemoizedEmployeeList: state => {
+        return state.memoizedEmployeeList;
+    },
 };
 
 const actions = {
@@ -83,6 +87,10 @@ const mutations = {
         return state;
     },
     createEmployee: (state, data) => state.employees.unshift(data),
+
+    setMemoizedEmployeeList(state, employeeRequest) {
+        state.memoizedEmployeeList = employeeRequest;
+    },
 };
 
 export default {
