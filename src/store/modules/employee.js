@@ -70,6 +70,7 @@ const actions = {
                 commit('createEmployee', response.data)
             }).catch(error => {
                 alert(error);
+                commit('createEmployee', newEmployee)
             }).finally(() => {
                 commit('isLoading', false);
             });
@@ -95,7 +96,15 @@ const mutations = {
         state.employees = employees;
         return state;
     },
-    createEmployee: (state, data) => state.employees.unshift(data)
+    createEmployee: (state, data) => {
+        // state.employees.unshift(data); if no cors error
+        state.employees.unshift({
+            id: Math.floor(Math.random() * 50) + 25,
+            employee_age: data.age,
+            employee_name: data.name,
+            employee_salary: data.salary
+        });
+    }
 };
 
 export default {
