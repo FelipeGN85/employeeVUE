@@ -3,7 +3,7 @@ import axios from "axios";
 const state = {
     employees: [],
     loading: false,
-    employee: {}
+    employee: {},
 };
 
 const getters = {
@@ -13,30 +13,43 @@ const getters = {
 };
 
 const actions = {
-    async fetchEmployees({ commit }) {
-        commit('isLoading', true);
-        axios.get(`http://dummy.restapiexample.com/api/v1/employees`)
-            .then(response => {
-                commit('setEmployees', response.data.data);
-            }).catch(error => {
-                alert(error);
-                window.location.reload();
-            }).finally(() => {
-                commit('isLoading', false);
-            });
+    async fetchEmployees({ commit, getters }) {
+        if (!getters.allEmployees.length > 0) {
+            commit('isLoading', true);
+            axios.get(`http://dummy.restapiexample.com/api/v1/employees`)
+                .then(response => {
+                    commit('setEmployees', response.data.data);
+                }).catch(error => {
+                    alert(error);
+                    window.location.reload();
+                }).finally(() => {
+                    commit('isLoading', false);
+                });
+        } else {
+            return getters.allEmployees;
+        }
     },
 
-    async fetchEmployee({ commit }, id) {
-        commit('isLoading', true);
-        axios.get(`http://dummy.restapiexample.com/api/v1/employee/${id}`)
-            .then(response => {
-                commit('setEmployee', response.data.data)
-            }).catch(error => {
-                alert(error);
-                window.location.reload();
-            }).finally(() => {
-                commit('isLoading', false);
-            });
+    async fetchEmployee({ commit, getters }, id) {
+        if (!getters.allEmployees.length > 0) {
+            commit('isLoading', true);
+            axios.get(`http://dummy.restapiexample.com/api/v1/employee/${id}`)
+                .then(response => {
+                    commit('setEmployee', response.data.data)
+                }).catch(error => {
+                    alert(error);
+                    window.location.reload();
+                }).finally(() => {
+                    commit('isLoading', false);
+                });
+
+        } else {
+            getters.allEmployees.find((employee) => {
+                if (employee.id == id) {
+                    commit('setEmployee', employee);
+                }
+            })
+        }
     },
 
     async deleteEmployee({ commit }, id) {
@@ -57,6 +70,7 @@ const actions = {
                 commit('createEmployee', response.data)
             }).catch(error => {
                 alert(error);
+                commit('createEmployee', newEmployee)
             }).finally(() => {
                 commit('isLoading', false);
             });
@@ -82,7 +96,15 @@ const mutations = {
         state.employees = employees;
         return state;
     },
-    createEmployee: (state, data) => state.employees.unshift(data),
+    createEmployee: (state, data) => {
+        // state.employees.unshift(data); if no cors error
+        state.employees.unshift({
+            id: Math.floor(Math.random() * 50) + 25,
+            employee_age: data.age,
+            employee_name: data.name,
+            employee_salary: data.salary
+        });
+    }
 };
 
 export default {
