@@ -17,17 +17,22 @@ const getters = {
 };
 
 const actions = {
-    async fetchEmployees({ commit }) {
-        commit('isLoading', true);
-        axios.get(`http://dummy.restapiexample.com/api/v1/employees`)
-            .then(response => {
-                commit('setEmployees', response.data.data);
-            }).catch(error => {
-                alert(error);
-                window.location.reload();
-            }).finally(() => {
-                commit('isLoading', false);
-            });
+    async fetchEmployees({ commit, getters }) {
+        if (!getters.getMemoizedEmployeeList) {
+            commit('isLoading', true);
+            axios.get(`http://dummy.restapiexample.com/api/v1/employees`)
+                .then(response => {
+                    commit('setEmployees', response.data.data);
+                    commit('setMemoizedEmployeeList', response.data.data)
+                }).catch(error => {
+                    alert(error);
+                    window.location.reload();
+                }).finally(() => {
+                    commit('isLoading', false);
+                });
+        } else {
+            return getters.getMemoizedEmployeeList;
+        }
     },
 
     async fetchEmployee({ commit }, id) {
