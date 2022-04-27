@@ -15,16 +15,20 @@ const getters = {
 const actions = {
     async fetchEmployees({ commit, getters }) {
         if (!getters.allEmployees.length > 0) {
-            commit('isLoading', true);
+            let start = new Date().getTime();
             axios.get(`http://dummy.restapiexample.com/api/v1/employees`)
                 .then(response => {
-                    setTimeout(() => {
-                        commit('setEmployees', response.data.data);
-                        commit('isLoading', false);
-                    }, 5000);
+                    let end = new Date().getTime();
+                    let elapsedTime = end - start;
+                    if (elapsedTime > 500) {
+                        commit('isLoading', true);
+                    }
+                    commit('setEmployees', response.data.data);
                 }).catch(error => {
                     alert(error);
                     window.location.reload();
+                }).finally(() => {
+                    commit('isLoading', false);
                 });
         } else {
             return getters.allEmployees;
@@ -33,16 +37,20 @@ const actions = {
 
     async fetchEmployee({ commit, getters }, id) {
         if (!getters.allEmployees.length > 0) {
-            commit('isLoading', true);
+            let start = new Date().getTime();
             axios.get(`http://dummy.restapiexample.com/api/v1/employee/${id}`)
                 .then(response => {
-                    setTimeout(() => {
-                        commit('setEmployee', response.data.data)
-                        commit('isLoading', false);
-                    }, 5000);
+                    let end = new Date().getTime();
+                    let elapsedTime = end - start;
+                    if (elapsedTime > 500) {
+                        commit('isLoading', true);
+                    }
+                    commit('setEmployee', response.data.data)
                 }).catch(error => {
                     alert(error);
                     window.location.reload();
+                }).finally(() => {
+                    commit('isLoading', false);
                 });
 
         } else {
