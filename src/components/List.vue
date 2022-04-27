@@ -51,8 +51,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["allEmployees"]),
-    ...mapGetters(["isLoading"]),
+    ...mapGetters(["allEmployees", "isLoading"]),
   },
   created() {
     this.fetchEmployees();
