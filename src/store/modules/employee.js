@@ -80,7 +80,7 @@ const actions = {
                 });
 
         } else {
-            getters.allEmployees.find((employee) => {
+            getters.allEmployees.foreach((employee) => {
                 if (employee.id == id) {
                     commit('setEmployee', employee);
                 }
