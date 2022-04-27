@@ -12,17 +12,45 @@ const getters = {
     employee: (state) => state.employee
 };
 
+const mutations = {
+    setEmployees: (state, data) => {
+        state.employees = data;
+    },
+    isLoading: (state, status) => {
+        state.loading = status;
+    },
+    setEmployee: (state, data) => {
+        state.employee = data;
+    },
+    deleteEmployee: (state, id) => {
+        var employees = state.employees.filter((e) => {
+            if (e.id !== id) {
+                return e;
+            }
+        });
+        state.employees = employees;
+        return state;
+    },
+    createEmployee: (state, data) => {
+        // state.employees.unshift(data); if no cors error
+        state.employees.unshift({
+            id: Math.floor(Math.random() * 50) + 25,
+            employee_age: data.age,
+            employee_name: data.name,
+            employee_salary: data.salary
+        });
+    }
+};
+
 const actions = {
     async fetchEmployees({ commit, getters }) {
         if (!getters.allEmployees.length > 0) {
-            let start = new Date().getTime();
+            const loadingTimeout = setTimeout(() => {
+                commit('isLoading', true);
+            }, 500);
             axios.get(`http://dummy.restapiexample.com/api/v1/employees`)
                 .then(response => {
-                    let end = new Date().getTime();
-                    let elapsedTime = end - start;
-                    if (elapsedTime > 500) {
-                        commit('isLoading', true);
-                    }
+                    clearTimeout(loadingTimeout);
                     commit('setEmployees', response.data.data);
                 }).catch(error => {
                     alert(error);
@@ -37,14 +65,12 @@ const actions = {
 
     async fetchEmployee({ commit, getters }, id) {
         if (!getters.allEmployees.length > 0) {
-            let start = new Date().getTime();
+            const loadingTimeout = setTimeout(() => {
+                commit('isLoading', true);
+            }, 500);
             axios.get(`http://dummy.restapiexample.com/api/v1/employee/${id}`)
                 .then(response => {
-                    let end = new Date().getTime();
-                    let elapsedTime = end - start;
-                    if (elapsedTime > 500) {
-                        commit('isLoading', true);
-                    }
+                    clearTimeout(loadingTimeout);
                     commit('setEmployee', response.data.data)
                 }).catch(error => {
                     alert(error);
@@ -84,36 +110,6 @@ const actions = {
             }).finally(() => {
                 commit('isLoading', false);
             });
-    }
-};
-
-const mutations = {
-    setEmployees: (state, data) => {
-        state.employees = data;
-    },
-    isLoading: (state, status) => {
-        state.loading = status;
-    },
-    setEmployee: (state, data) => {
-        state.employee = data;
-    },
-    deleteEmployee: (state, id) => {
-        var employees = state.employees.filter((e) => {
-            if (e.id !== id) {
-                return e;
-            }
-        });
-        state.employees = employees;
-        return state;
-    },
-    createEmployee: (state, data) => {
-        // state.employees.unshift(data); if no cors error
-        state.employees.unshift({
-            id: Math.floor(Math.random() * 50) + 25,
-            employee_age: data.age,
-            employee_name: data.name,
-            employee_salary: data.salary
-        });
     }
 };
 
