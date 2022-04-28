@@ -48,7 +48,7 @@ const actions = {
             const loadingTimeout = setTimeout(() => {
                 commit('isLoading', true);
             }, 500);
-            axios.get(`http://dummy.restapiexample.com/api/v1/employees`)
+            axios.get(`https://dummy.restapiexample.com/api/v1/employees`)
                 .then(response => {
                     clearTimeout(loadingTimeout);
                     commit('setEmployees', response.data.data);
@@ -80,7 +80,7 @@ const actions = {
                 });
 
         } else {
-            getters.allEmployees.foreach((employee) => {
+            getters.allEmployees.forEach(employee => {
                 if (employee.id == id) {
                     commit('setEmployee', employee);
                 }
